@@ -5,7 +5,28 @@
     <title>Title</title>
 </head>
 <body>
-<p>du är på admin</p>
+<h1>du är på admin</h1>
+<h3 th:text="${username}"></h3>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Namn</th>
+        <th>Pris</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${products.empty}">
+        <td>Inga produkter ännu</td>
+    </tr>
+    <tr th:each="product : ${products}">
+        <td><span th:text="${product.id}"></span></td>
+        <td><span th:text="${product.name}"></span></td>
+        <td><span th:text="${product.price}"></span></td>
+    </tr>
+    </tbody>
+</table>
+
 <a th:href="@{~/logout}">Logga ut här </a>
 </body>
 </html>
