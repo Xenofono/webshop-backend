@@ -23,6 +23,7 @@ public class SuccessAuthenticationHandler implements AuthenticationSuccessHandle
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+
         if(user != null){
             session.setAttribute("username", user.getUsername());
             if(user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
