@@ -6,4 +6,6 @@ import tech.kristoffer.webshop.models.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
+
+    User findUserByUsername(String username);
 }
