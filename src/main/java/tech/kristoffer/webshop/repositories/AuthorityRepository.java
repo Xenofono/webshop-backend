@@ -2,8 +2,8 @@ package tech.kristoffer.webshop.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import tech.kristoffer.webshop.models.User;
+import tech.kristoffer.webshop.models.Authority;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface AuthorityRepository extends CrudRepository<Authority, Integer> {
 }

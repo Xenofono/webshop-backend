@@ -20,7 +20,9 @@ public class User {
 
     private String username;
     private String password;
+    @Transient
     private String authority;
+    private int enabled = 1;
 
 
 }

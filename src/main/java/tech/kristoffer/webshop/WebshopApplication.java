@@ -4,9 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import tech.kristoffer.webshop.models.Authority;
 import tech.kristoffer.webshop.models.Product;
+import tech.kristoffer.webshop.models.User;
+import tech.kristoffer.webshop.repositories.AuthorityRepository;
 import tech.kristoffer.webshop.repositories.ProductRepository;
+import tech.kristoffer.webshop.repositories.UserRepository;
 
 import java.util.List;
 
@@ -17,6 +25,13 @@ public class WebshopApplication implements CommandLineRunner {
     private JavaMailSender javaMailSender;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(WebshopApplication.class, args);
@@ -42,5 +57,30 @@ public class WebshopApplication implements CommandLineRunner {
         product2.setName("Blå matta");
         product2.setPrice(195);
         productRepository.saveAll(List.of(product, product2));
+
+        User newUser = new User();
+        newUser.setUsername("kristoffer");
+        newUser.setPassword(passwordEncoder.encode("pass"));
+
+        User newUser2 = new User();
+        newUser2.setUsername("alina");
+        newUser2.setPassword(passwordEncoder.encode("pass"));
+
+        userRepository.save(newUser);
+        userRepository.save(newUser2);
+
+        Authority authority = new Authority();
+        authority.setUsername("kristoffer");
+        authority.setAuthority("ROLE_ADMIN");
+
+        Authority authority2 = new Authority();
+        authority2.setUsername("alina");
+        authority2.setAuthority("ROLE_USER");
+
+
+        authorityRepository.save(authority);
+        authorityRepository.save(authority2);
     }
+
+
 }

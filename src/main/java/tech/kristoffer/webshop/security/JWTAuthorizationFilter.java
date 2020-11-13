@@ -31,7 +31,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader(HEADER_STRING);
-
+        System.out.println("TEST");
+        System.out.println(request.getHeader("authorization"));
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
             chain.doFilter(request, response);
             return;
@@ -44,7 +45,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
-
         if (token != null) {
             DecodedJWT decodedJwt =  JWT.require(Algorithm.HMAC256("apa näbbdjur oneplus stor fisk".getBytes()))
                     .build()
