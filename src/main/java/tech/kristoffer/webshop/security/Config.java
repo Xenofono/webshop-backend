@@ -1,19 +1,26 @@
 package tech.kristoffer.webshop.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -35,9 +42,9 @@ public class Config {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("kristoffer").password(passwordEncoder.encode("pass")).roles("ADMIN")
+        auth.inMemoryAuthentication().withUser("kristoffer").password(passwordEncoder.encode("pass")).authorities("ROLE_ADMIN")
                 .and().withUser("alina").password(passwordEncoder.encode("pass"))
-                .roles("USER");
+                .authorities("ROLE_USER");
     }
 
 
@@ -45,15 +52,21 @@ public class Config {
     @Configuration
     @Order(1)
     public static class ShopConfig extends WebSecurityConfigurerAdapter {
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-//            http.httpBasic();
-//            http.authorizeRequests()
-//                    .mvcMatchers("/shop").hasRole("USER");
+            http.cors().and().authorizeRequests()
+                    .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
+                    .antMatchers("/shop/**").hasAnyAuthority("ROLE_USER")
+                    .anyRequest().authenticated()
+                    .and()
+                    .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                    .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and().csrf().disable();
 
-            http.antMatcher("/shop/**").authorizeRequests().anyRequest().hasRole("USER").and().httpBasic();
+
+//            http.antMatcher("/shop/**").authorizeRequests().anyRequest().hasRole("USER").and().httpBasic();
 
 
         }
@@ -82,5 +95,14 @@ public class Config {
 
 
         }
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfiguration(){
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 }

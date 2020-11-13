@@ -1,4 +1,4 @@
-package tech.kristoffer.webshop.entities;
+package tech.kristoffer.webshop.models;
 
 import lombok.Data;
 
@@ -7,15 +7,14 @@ import java.util.List;
 
 @Entity
 @Data
-public class Cart {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @OneToMany
     private List<CartItem> cartItems;
-    @OneToOne
-    private User user;
+    @ManyToOne
+    private User orderUser;
     private double total;
 }

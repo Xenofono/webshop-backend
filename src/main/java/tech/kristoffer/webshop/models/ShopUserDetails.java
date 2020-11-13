@@ -1,31 +1,34 @@
-package tech.kristoffer.webshop.entities;
+package tech.kristoffer.webshop.models;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
-@Entity
-@Data
-public class User implements UserDetails {
+public class ShopUserDetails implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @OneToOne
-    private Cart cart;
-    @OneToMany
-    private Set<Order> orders;
+    private final User user;
 
-    private String username;
-    private String password;
+    public ShopUserDetails(User user) {
+        this.user = user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(user::getAuthority);
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getUsername();
     }
 
     @Override

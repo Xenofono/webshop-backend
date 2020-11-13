@@ -1,4 +1,4 @@
-package tech.kristoffer.webshop.entities;
+package tech.kristoffer.webshop.models;
 
 import lombok.Data;
 
