@@ -14,6 +14,7 @@ public class Cart {
     private Long id;
 
     @OneToMany
+    @JoinColumn(name = "cart_id")
     private List<CartItem> cartItems;
     @OneToOne
     private User user;

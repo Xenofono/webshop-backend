@@ -1,12 +1,8 @@
 package tech.kristoffer.webshop.models;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +15,8 @@ public class User {
     @OneToOne
     private Cart cart;
     @OneToMany
-    private Set<Order> orders;
+    @JoinColumn(name = "user_id")
+    private Set<ShopOrder> orders;
 
     private String username;
     private String password;

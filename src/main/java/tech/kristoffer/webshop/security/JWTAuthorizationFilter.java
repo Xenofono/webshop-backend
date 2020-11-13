@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +23,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private static final String HEADER_STRING = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
-
-    private final List<String> ALLOWED_ROLES = List.of("USER", "ADMIN");
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -61,8 +58,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             System.out.println(role);
 
 
-            if (user != null && ALLOWED_ROLES.contains(role)) {
-                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+            if (user != null ) {
+                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_"+role));
                 return new UsernamePasswordAuthenticationToken(user, null, authorities);
             }
 

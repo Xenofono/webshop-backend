@@ -48,15 +48,16 @@ public class Config {
     }
 
 
-
     @Configuration
     @Order(1)
     public static class ShopConfig extends WebSecurityConfigurerAdapter {
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http.cors().and().authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
+            http.antMatcher("/shop/**")
+                    .authorizeRequests()
+                    .antMatchers(HttpMethod.POST, "/shop/signup").permitAll()
                     .antMatchers("/shop/**").hasAnyAuthority("ROLE_USER")
                     .anyRequest().authenticated()
                     .and()
@@ -65,15 +66,22 @@ public class Config {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and().csrf().disable();
 
-
-//            http.antMatcher("/shop/**").authorizeRequests().anyRequest().hasRole("USER").and().httpBasic();
+//            http.cors().and().authorizeRequests()
+//                    .antMatchers(HttpMethod.POST, "/shop/signup").permitAll()
+//                    .antMatchers("/shop/**").hasAnyAuthority("ROLE_USER")
+//                    .anyRequest().authenticated()
+//                    .and()
+//                    .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+//                    .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+//                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                    .and().csrf().disable();
 
 
         }
     }
 
     @Configuration
-            @Order(2)
+    @Order(2)
     public static class AdminConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
@@ -82,9 +90,9 @@ public class Config {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-
             http.csrf().disable().authorizeRequests(authorize ->
-                    authorize.mvcMatchers("/admin/**").hasRole("ADMIN"))
+                    authorize.antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                            .antMatchers("/login").permitAll())
                     .formLogin()
                     .permitAll()
                     .successHandler(authenticationSuccessHandler)
@@ -97,12 +105,12 @@ public class Config {
         }
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfiguration(){
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfiguration(){
+//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//
+//        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//        return source;
+//    }
 }
