@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>Kris webbshop</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" defer></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <script th:src="@{/script.js}" defer></script>
+</head>
+<body>
+<ul id="dropdown1" class="dropdown-content">
+    <li><a th:href="@{/admin/products}">Alla produkter</a></li>
+    <li class="divider"></li>
+    <li><a th:href="@{/admin/add-produkt}">Lägg till produkt</a></li>
+</ul>
+<nav th:fragment="header">
+    <div class="nav-wrapper">
+<!--        <a th:href="@{/admin}" class="brand-logo center">Kris webshop</a>-->
+        <ul class="left hide-on-med-and-down">
+            <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Produkter<i class="material-icons right">arrow_drop_down</i></a></li>
+            <li ><a th:href="@{/admin/orders}">Beställningar</a></li>
+            <li ><a th:href="@{/admin/users}">Användare</a></li>
+            <li ><a th:href="@{/admin/add-admin}">Administratörer</a></li>
+            <li ><a th:href="@{/logout}">Logga ut</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+
+</div>
+
+</body>
+</html>

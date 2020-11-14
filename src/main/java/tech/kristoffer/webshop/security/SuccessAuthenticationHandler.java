@@ -27,7 +27,7 @@ public class SuccessAuthenticationHandler implements AuthenticationSuccessHandle
         if(user != null){
             session.setAttribute("username", user.getUsername());
             if(user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
-                httpServletResponse.sendRedirect("/admin");
+                httpServletResponse.sendRedirect("/admin/products");
             }
             else{
 //                Cookie cookie = new Cookie("JSESSIONID", "");

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: head"></head>
+<body>
+<nav th:include="fragments/header.html"></nav>
+
+<div class="container">
+    <h1>du är på admin</h1>
+    <h3 th:text="${username}"></h3>
+
+</div>
+</body>
+</html>

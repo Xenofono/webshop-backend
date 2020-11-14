@@ -50,12 +50,14 @@ public class WebshopApplication implements CommandLineRunner {
         Product product = new Product();
         product.setImageUrl("https://imgprd19.hobbylobby.com/5/ba/61/5ba610f22c7cd6efb4e6c69387d938451a6c40e6/350Wx350H-633719-0320.jpg");
         product.setName("Röd tröja");
+        product.setDescription("Fin och röd, du har den på kroppen, du vet vad en tröja är va?");
         product.setPrice(149.99);
 
         Product product2 = new Product();
         product2.setImageUrl("https://static.mio.host/images/products/35726.jpg?width=1920&height=1920&crop=false");
         product2.setName("Blå matta");
         product2.setPrice(195);
+        product2.setDescription("Blå, den ska vara på golvet");
         productRepository.saveAll(List.of(product, product2));
 
         User newUser = new User();

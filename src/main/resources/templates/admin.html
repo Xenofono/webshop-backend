@@ -1,38 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
-
-</head>
+<head th:include="fragments/header :: head"></head>
 <body>
-<h1>du är på admin</h1>
-<h3 th:text="${username}"></h3>
-<table>
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Namn</th>
-        <th>Pris</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:if="${products.empty}">
-        <td>Inga produkter ännu</td>
-    </tr>
-    <tr th:each="product : ${products}">
-        <td><span th:text="${product.id}"></span></td>
-        <td><span th:text="${product.name}"></span></td>
-        <td><span th:text="${product.price}"></span></td>
-    </tr>
-    </tbody>
-</table>
+<nav th:include="fragments/header"></nav>
 
-<a th:href="@{~/logout}">Logga ut här </a>
+<div class="container">
+    <h1>du är på admin</h1>
+    <h3 th:text="${username}"></h3>
+
+
+    <div class="row">
+        <div class="col s12 m8 l6" th:each="product : ${products}">
+            <div class="card hoverable">
+                <div class="card-image">
+                    <img th:src="${product.imageUrl}">
+                    <span class="card-title black" th:text="|${product.name} ${product.price} kr|"></span>
+                </div>
+                <div class="card-content">
+                    <p th:text="${product.description}"></p>
+                </div>
+                <div class="card-action">
+                    <a th:href="@{/admin/removeproduct/}+${product.id}">Ta bort produkt</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
