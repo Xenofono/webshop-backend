@@ -6,11 +6,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tech.kristoffer.webshop.models.Authority;
+import tech.kristoffer.webshop.models.CreateUserRequest;
 import tech.kristoffer.webshop.models.Product;
 import tech.kristoffer.webshop.models.User;
 import tech.kristoffer.webshop.repositories.AuthorityRepository;
 import tech.kristoffer.webshop.repositories.ProductRepository;
 import tech.kristoffer.webshop.repositories.UserRepository;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("shop")
@@ -41,12 +44,15 @@ public class ShopController {
     }
 
     @PostMapping("signup")
-    public ResponseEntity<?> createUser(@RequestBody User user){
-        System.out.println(user.getUsername());
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest newUser){
+        System.out.println(newUser.getUsername());
 
-        if(user.getUsername() == null || user.getPassword() == null || userRepository.findUserByUsername(user.getUsername()) != null){
+        if( userRepository.findUserByUsername(newUser.getUsername()) != null){
             return ResponseEntity.unprocessableEntity().build();
         }
+        User user = new User();
+        user.setUsername(newUser.getUsername());
+        user.setPassword(newUser.getPassword());
         user.setAuthority("ROLE_USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Authority authority = new Authority();

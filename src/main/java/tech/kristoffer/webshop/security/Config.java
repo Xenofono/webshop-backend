@@ -36,12 +36,12 @@ import java.util.Arrays;
 public class Config {
 
     private PasswordEncoder passwordEncoder;
+    private UserDetailsService userDetailsService;
 
-    public Config(PasswordEncoder passwordEncoder) {
+    public Config(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         this.passwordEncoder = passwordEncoder;
+        this.userDetailsService = userDetailsService;
     }
-
-
 //    @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication().withUser("kristoffer").password(passwordEncoder.encode("pass")).authorities("ROLE_ADMIN")
@@ -52,13 +52,10 @@ public class Config {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth, DataSource dataSource) throws Exception {
-        final String getUsers = "SELECT username, password, enabled FROM user WHERE username = ?";
-        final String getAuthorities = "SELECT username, authority FROM authority WHERE username = ?";
-        auth.jdbcAuthentication()
-                .usersByUsernameQuery(getUsers)
-                .authoritiesByUsernameQuery(getAuthorities)
-                .passwordEncoder(passwordEncoder)
-                .dataSource(dataSource);
+//        auth.jdbcAuthentication()
+//                .passwordEncoder(passwordEncoder)
+//                .dataSource(dataSource);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
 

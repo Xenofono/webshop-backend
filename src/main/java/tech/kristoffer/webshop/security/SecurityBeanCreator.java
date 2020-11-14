@@ -15,16 +15,16 @@ import java.util.Map;
 @Service
 public class SecurityBeanCreator {
 
-//    @Bean
-//    public UserDetailsService userDetailsService(DataSource dataSource){
-//        final String getUsers = "SELECT username, password, enabled FROM user WHERE username = ?";
-//        final String getAuthorities = "SELECT username, authority FROM authority WHERE username = ?";
-//        var userManager = new JdbcUserDetailsManager(dataSource);
-//
-//        userManager.setUsersByUsernameQuery(getUsers);
-//        userManager.setAuthoritiesByUsernameQuery(getAuthorities);
-//        return userManager;
-//    }
+    @Bean
+    public UserDetailsService userDetailsService(DataSource dataSource){
+        final String getUsers = "SELECT username, password, enabled FROM user WHERE username = ?";
+        final String getAuthorities = "SELECT username, authority FROM authority WHERE username = ?";
+        var userManager = new JdbcUserDetailsManager(dataSource);
+
+        userManager.setUsersByUsernameQuery(getUsers);
+        userManager.setAuthoritiesByUsernameQuery(getAuthorities);
+        return userManager;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
