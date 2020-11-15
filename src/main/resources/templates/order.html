@@ -8,10 +8,11 @@
 
 
     <div class="row">
-        <h2 th:text="'Beställningsnummer: ' + ${order.id}"></h2>
-        <h3 th:text="'Beställd av: ' + ${order.user.username}"></h3>
-        <h3 th:text="'Totala beloppet : ' + ${order.total} + ' kr'"></h3>
-        <h3 th:text="${order.expedited} ? 'Order skickad: JA' : 'Order skickad: NEJ'"></h3>
+        <h4 th:text="'Beställningsnummer: ' + ${order.id}"></h4>
+        <h4 th:text="'Beställd av: ' + ${order.user.username}"></h4>
+        <h4 th:text="'Kundnummer: ' + ${order.user.id}"></h4>
+        <h4 th:text="'Totala beloppet : ' + ${order.total} + ' kr'"></h4>
+        <h4 th:text="${order.expedited} ? 'Order skickad: JA' : 'Order skickad: NEJ'"></h4>
     </div>
 
 
