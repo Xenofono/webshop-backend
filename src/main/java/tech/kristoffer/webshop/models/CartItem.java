@@ -1,11 +1,14 @@
 package tech.kristoffer.webshop.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartItem {
 
     @Id
@@ -15,4 +18,13 @@ public class CartItem {
     @OneToOne
     private Product product;
     private int quantity;
+    private double sum;
+
+
+    public void addItemAndQuantity(Product product, int quantity){
+        this.sum = product.getPrice() * quantity;
+
+    }
+
+
 }

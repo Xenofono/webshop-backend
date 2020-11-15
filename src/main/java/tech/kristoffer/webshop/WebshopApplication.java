@@ -9,12 +9,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tech.kristoffer.webshop.models.Authority;
-import tech.kristoffer.webshop.models.Product;
-import tech.kristoffer.webshop.models.User;
-import tech.kristoffer.webshop.repositories.AuthorityRepository;
-import tech.kristoffer.webshop.repositories.ProductRepository;
-import tech.kristoffer.webshop.repositories.UserRepository;
+import tech.kristoffer.webshop.models.*;
+import tech.kristoffer.webshop.repositories.*;
+import tech.kristoffer.webshop.service.ShopOrderService;
 
 import java.util.List;
 
@@ -29,9 +26,15 @@ public class WebshopApplication implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private AuthorityRepository authorityRepository;
+    @Autowired
+    private ShopOrderService shopOrderService;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(WebshopApplication.class, args);
@@ -78,6 +81,19 @@ public class WebshopApplication implements CommandLineRunner {
         Authority authority2 = new Authority();
         authority2.setUsername("alina");
         authority2.setAuthority("ROLE_USER");
+
+
+        CartItem cartItem = new CartItem();
+        cartItem.setProduct(product);
+        cartItem.setQuantity(3);
+        CartItem cartItem2 = new CartItem();
+        cartItem2.setProduct(product2);
+        cartItem2.setQuantity(5);
+        newUser2.addCartItem(cartItem);
+        newUser2.addCartItem(cartItem2);
+        shopOrderService.createOrder(newUser2);
+
+
 
 
         authorityRepository.save(authority);
