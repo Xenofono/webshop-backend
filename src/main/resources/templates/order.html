@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: head"></head>
+<body>
+<nav th:include="fragments/header.html"></nav>
+
+<div class="container">
+
+
+    <div class="row">
+        <h2 th:text="'Beställningsnummer: ' + ${order.id}"></h2>
+        <h3 th:text="'Beställd av: ' + ${order.user.username}"></h3>
+        <h3 th:text="'Totala beloppet : ' + ${order.total} + ' kr'"></h3>
+        <h3 th:text="${order.expedited} ? 'Order skickad: JA' : 'Order skickad: NEJ'"></h3>
+    </div>
+
+
+    <div class="row">
+        <table>
+            <thead>
+            <tr>
+                <th>Produkt</th>
+                <th>Antal</th>
+                <th>Summa</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="item: ${items}">
+                <td th:text="${item.product.name}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${item.sum}"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="row" th:if="${not order.expedited}">
+        <div class="s12">
+            <form action="#" th:action="@{/admin/expediteproduct/}+${order.id}" method="post">
+                <button class="btn waves-effect waves-light" type="submit" name="action">Skicka beställningen
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>
