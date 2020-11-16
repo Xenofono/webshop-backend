@@ -16,6 +16,7 @@ public class ShopUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        System.out.println(user.getAuthority());
         return List.of(user::getAuthority);
     }
 

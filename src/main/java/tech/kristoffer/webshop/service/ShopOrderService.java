@@ -9,6 +9,7 @@ import tech.kristoffer.webshop.models.User;
 import tech.kristoffer.webshop.repositories.ShopOrderRepository;
 import tech.kristoffer.webshop.utilities.JsonMapper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,13 @@ public class ShopOrderService {
     public void expediteOrder(String id) {
         long parsedId = Long.parseLong(id);
         ShopOrder order = shopOrderRepository.findById(parsedId).orElseThrow(() -> new IllegalArgumentException("finns inte"));
-        order.setExpedited(true);
+        order.setExpedited(LocalDateTime.now());
         shopOrderRepository.save(order);
     }
+
+    public List<ShopOrder> findByUserUsername(String name){
+        return shopOrderRepository.findShopOrderByUserUsernameContaining(name);
+    }
+
+
 }

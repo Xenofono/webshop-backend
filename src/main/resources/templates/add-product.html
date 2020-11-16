@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: head"></head>
+<body>
+<nav th:include="fragments/header.html"></nav>
+
+<div class="container">
+    <h1 th:text="${edit} ? 'Ändra produkt' : 'Ny produkt'">Ny produkt</h1>
+    <div class="row">
+        <div class="s12">
+
+            <form action="#" th:action="@{/admin/add-product/}" th:object="${form}" th:method="${edit} ? 'put' : 'post'">
+                <input type="hidden" th:field="*{id}">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input th:value="haha" placeholder="Produktens namn" id="product_name" type="text"
+                               class="validate" th:field="*{firstInput}">
+
+                        <label for="product_name">Produktens namn</label>
+
+                    </div>
+                    <div class="input-field col s6">
+
+                        <input placeholder="Produktens pris" id="product_price" type="text" class="validate"
+                               th:field="*{secondInput}">
+                        <label for="product_price">Produktens pris</label>
+
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input placeholder="Produktens beskrivning" id="product_description" type="text"
+                               class="validate" th:field="*{thirdInput}">
+                        <label for="product_description">Produktens beskrivning</label>
+
+                    </div>
+                    <div class="input-field col s6">
+
+                        <input placeholder="Produktens bildkälla" id="product_image" type="text" class="validate"
+                               th:field="*{fourthInput}">
+                        <label for="product_image">Produktens bildkälla</label>
+
+                    </div>
+
+
+                </div>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Lägg till produkt
+                    <i class="material-icons right">send</i>
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

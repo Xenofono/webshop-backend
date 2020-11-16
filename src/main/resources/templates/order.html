@@ -12,7 +12,8 @@
         <h4 th:text="'Beställd av: ' + ${order.user.username}"></h4>
         <h4 th:text="'Kundnummer: ' + ${order.user.id}"></h4>
         <h4 th:text="'Totala beloppet : ' + ${order.total} + ' kr'"></h4>
-        <h4 th:text="${order.expedited} ? 'Order skickad: JA' : 'Order skickad: NEJ'"></h4>
+        <h4 th:text="'Skapad : ' + ${order.created}"></h4>
+        <h4 th:text="${order.expedited} ? 'Order skickad: ' + ${order.expedited} : 'Order skickad: NEJ'"></h4>
     </div>
 
 
@@ -38,7 +39,7 @@
     </div>
 
 
-    <div class="row" th:if="${not order.expedited}">
+    <div class="row" th:if="${order.expedited == null}">
         <div class="s12">
             <form action="#" th:action="@{/admin/expediteproduct/}+${order.id}" method="post">
                 <button class="btn waves-effect waves-light" type="submit" name="action">Skicka beställningen

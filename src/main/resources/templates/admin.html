@@ -10,17 +10,18 @@
 
 
     <div class="row">
-        <div class="col s12 m8 l6" th:each="product : ${products}">
+        <div class="col s12 m6 l3" th:each="product : ${products}">
             <div class="card hoverable">
                 <div class="card-image">
                     <img th:src="${product.imageUrl}">
-                    <span class="card-title black" th:text="|${product.name} ${product.price} kr|"></span>
+                    <span class="card-title grey darken-1" th:text="|${product.name} ${product.price} kr|"></span>
                 </div>
                 <div class="card-content">
                     <p th:text="${product.description}"></p>
                 </div>
                 <div class="card-action">
-                    <a th:href="@{/admin/removeproduct/}+${product.id}">Ta bort produkt</a>
+                    <a th:href="@{/admin/removeproduct/}+${product.id}">Ta bort</a>
+                    <a th:href="@{/admin/add-product/}+'?id='+${product.id}">Ändra</a>
                 </div>
             </div>
         </div>

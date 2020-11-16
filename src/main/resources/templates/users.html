@@ -5,11 +5,11 @@
 <nav th:include="fragments/header.html"></nav>
 
 <div class="container">
-    <h1>Beställningar</h1>
+    <h1>Användare</h1>
     <div class="row">
         <div class="s12">
 
-            <form action="#" th:action="@{/admin/orders/}" th:object="${form}" method="post">
+            <form action="#" th:action="@{/admin/users/}" th:object="${form}" method="post">
                 <div class="row">
                     <div class="input-field col s6">
                         <input placeholder="Sök användare" id="user_username" type="text" class="validate" th:field="*{firstInput}">
@@ -30,21 +30,17 @@
             <tr>
                 <th>Id</th>
                 <th>Användare</th>
-                <th>Total</th>
-                <th>Skapad</th>
-                <th>Skickad</th>
-                <th>Se detaljer</th>
+                <th>Total summa i kundvagnen</th>
+                <th>Roll</th>
             </tr>
             </thead>
 
             <tbody>
-            <tr th:each="order: ${orders}">
-                <td th:text="${order.id}"></td>
-                <td th:text="${order.user.username}"></td>
-                <td th:text="${order.total}"></td>
-                <td th:text="${order.created}"></td>
-                <td th:text="${order.expedited}"></td>
-                <td><a class="waves-effect waves-light btn" th:href="@{/admin/orders/}+${order.id}">Detaljer</a></td>
+            <tr th:each="user: ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.cart.total}"></td>
+                <td th:text="${user.authority}"></td>
             </tr>
 
             </tbody>

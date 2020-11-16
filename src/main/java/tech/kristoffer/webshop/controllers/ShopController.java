@@ -61,7 +61,7 @@ public class ShopController {
 
         userRepository.save(user);
         authorityRepository.save(authority);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok().build();
 
     }
 }
