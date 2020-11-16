@@ -147,7 +147,6 @@ public class AdminController {
 
     @PutMapping("/add-product")
     public String putEditProduct(@ModelAttribute FormModel formModel){
-        System.out.println("HEJ");
         productService.updateProduct(formModel);
         return "redirect:/admin/products";
     }
