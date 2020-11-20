@@ -1,23 +1,20 @@
 package tech.kristoffer.webshop.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import tech.kristoffer.webshop.constants.SecurityConstants;
 import tech.kristoffer.webshop.exceptions.UserExistsException;
 import tech.kristoffer.webshop.models.*;
-import tech.kristoffer.webshop.models.requests.AddToCartRequest;
+import tech.kristoffer.webshop.models.requests.CreateUserRequest;
+import tech.kristoffer.webshop.models.responses.OrdersResponse;
+import tech.kristoffer.webshop.models.responses.UserResponse;
 import tech.kristoffer.webshop.repositories.AuthorityRepository;
 import tech.kristoffer.webshop.repositories.ProductRepository;
 import tech.kristoffer.webshop.repositories.UserRepository;
+import tech.kristoffer.webshop.utilities.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -26,12 +23,14 @@ public class UserService {
     private AuthorityRepository authorityRepository;
     private PasswordEncoder passwordEncoder;
     private ProductRepository productRepository;
+    private JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, ProductRepository productRepository) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, ProductRepository productRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
         this.productRepository = productRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public Iterable<User> findAll() {
@@ -59,7 +58,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User signupUser(CreateUserRequest newUser) {
+    public void signupUser(CreateUserRequest newUser) {
 
         if(userRepository.findUserByUsername(newUser.getUsername()) != null){
             throw new UserExistsException(newUser.getUsername());
@@ -74,44 +73,26 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         user.setAuthority(authority);
         userRepository.save(user);
-        return user;
     }
 
-    public void addToCart(AddToCartRequest addToCartRequest, HttpServletRequest request) {
-        User user = getUserFromRequest(request)
-                .orElseThrow(() -> new RuntimeException("Kunde inte hitta användare"));
-        Product productToAdd = productRepository.findById(addToCartRequest.getId())
-                .orElseThrow(() -> new RuntimeException("Kunde inte hitta produkt"));
+    public UserResponse getUser(HttpServletRequest request) {
+        User user = jwtUtil.getUserFromRequest(request);
 
-        CartItem newCartItem = new CartItem();
-        newCartItem.setProduct(productToAdd);
-        newCartItem.setQuantity(addToCartRequest.getQuantity());
-        double sum = productToAdd.getPrice() * addToCartRequest.getQuantity();
-        newCartItem.setSum(sum);
-
-        user.addCartItem(newCartItem);
-        userRepository.save(user);
-
-
-
+        UserResponse response = new UserResponse();
+        BeanUtils.copyProperties(user, response);
+        return response;
     }
 
-    private Optional<User> getUserFromRequest(HttpServletRequest request){
-        String header = request.getHeader(SecurityConstants.HEADER_STRING);
-        System.out.println("USER FRÅN REQUEST I SHOPCONTROLLER");
-        System.out.println(request.getHeader("authorization"));
-        if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
-            return Optional.empty();
-        }
-        String token = request.getHeader(SecurityConstants.HEADER_STRING);
-        DecodedJWT decodedJwt =  JWT.require(Algorithm.HMAC256("apa näbbdjur oneplus stor fisk".getBytes()))
-                .build()
-                .verify(token.replace(SecurityConstants.TOKEN_PREFIX, ""));
 
-        String subject = decodedJwt.getSubject();
-        return Optional.ofNullable(userRepository.findUserByUsername(subject));
+    public OrdersResponse getUserOrders(HttpServletRequest request) {
+        User user = jwtUtil.getUserFromRequest(request);
 
+        OrdersResponse response = new OrdersResponse();
+        BeanUtils.copyProperties(user, response);
+        return response;
     }
+
+
 
 //    public Set<ShopOrder> findUserByUsernameContaining(String name){
 //        List<User> users =  userRepository.findUserByUsernameContaining(name);

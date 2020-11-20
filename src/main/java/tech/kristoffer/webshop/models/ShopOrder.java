@@ -1,5 +1,6 @@
 package tech.kristoffer.webshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
 import org.hibernate.annotations.Type;
@@ -27,6 +28,7 @@ public class ShopOrder {
     @Column(columnDefinition = "json")
     private Map<String, String> items = new HashMap<>();
     @ManyToOne
+    @JsonIgnore
     private User user;
     private double total;
     private LocalDateTime created;

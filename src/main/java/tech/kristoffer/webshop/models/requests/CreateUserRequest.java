@@ -1,4 +1,4 @@
-package tech.kristoffer.webshop.models;
+package tech.kristoffer.webshop.models.requests;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;

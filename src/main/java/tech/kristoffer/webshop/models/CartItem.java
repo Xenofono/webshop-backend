@@ -3,6 +3,7 @@ package tech.kristoffer.webshop.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -15,7 +16,7 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private Product product;
     private int quantity;
     private double sum;
@@ -26,5 +27,16 @@ public class CartItem {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        return Objects.equals(product, cartItem.product);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(product);
+    }
 }

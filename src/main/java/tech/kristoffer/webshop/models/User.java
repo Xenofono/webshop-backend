@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart = new Cart();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -41,6 +41,13 @@ public class User {
 
     }
 
+    public void removeCartItem(CartItem item) {
+        double oldTotal = this.cart.getTotal();
+        double newTotal = oldTotal - item.getSum();
+        this.cart.setTotal(newTotal);
+        this.cart.getCartItems().remove(item);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -54,4 +61,6 @@ public class User {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }
