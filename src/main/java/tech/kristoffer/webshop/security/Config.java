@@ -22,6 +22,7 @@ import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import tech.kristoffer.webshop.repositories.AuthorityRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -38,7 +39,7 @@ public class Config {
     private PasswordEncoder passwordEncoder;
     private UserDetailsService userDetailsService;
 
-    public Config(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
+    public Config(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService ) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
     }
@@ -63,9 +64,14 @@ public class Config {
     @Order(1)
     public static class ShopConfig extends WebSecurityConfigurerAdapter {
 
+        @Autowired
+        private AuthorityRepository authorityRepository;
+
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+
+
 
             http.cors().and().antMatcher("/shop/**")
                     .authorizeRequests()
@@ -74,7 +80,7 @@ public class Config {
                     .anyRequest().authenticated()
                     .and()
                     .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                    .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                    .addFilter(new JWTAuthorizationFilter(authenticationManager(), authorityRepository))
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and().csrf().disable();
 

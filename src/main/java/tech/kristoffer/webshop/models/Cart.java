@@ -16,13 +16,14 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private List<CartItem> cartItems = new ArrayList<>();
     @OneToOne
     @JsonIgnore
     private User user;
     private double total;
+
 
     @Override
     public boolean equals(Object o) {

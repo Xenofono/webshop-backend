@@ -7,4 +7,6 @@ import tech.kristoffer.webshop.models.Authority;
 @Repository
 public interface AuthorityRepository extends CrudRepository<Authority, Integer> {
     Authority findByUsername(String username);
+
+    Authority findByAuthority(String role_user);
 }

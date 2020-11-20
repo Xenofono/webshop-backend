@@ -63,6 +63,11 @@ public class WebshopApplication implements CommandLineRunner {
         product2.setDescription("Blå, den ska vara på golvet");
         productRepository.saveAll(List.of(product, product2));
 
+
+
+
+
+
         User newUser = new User();
         newUser.setUsername("kristoffer");
         newUser.setPassword(passwordEncoder.encode("pass"));
@@ -74,13 +79,7 @@ public class WebshopApplication implements CommandLineRunner {
         userRepository.save(newUser);
         userRepository.save(newUser2);
 
-        Authority authority = new Authority();
-        authority.setUsername("kristoffer");
-        authority.setAuthority("ROLE_ADMIN");
 
-        Authority authority2 = new Authority();
-        authority2.setUsername("alina");
-        authority2.setAuthority("ROLE_USER");
 
 
         CartItem cartItem = new CartItem();
@@ -94,10 +93,18 @@ public class WebshopApplication implements CommandLineRunner {
         shopOrderService.createOrder(newUser2);
 
 
+        Authority authority = new Authority();
+        authority.setAuthority("ROLE_ADMIN");
+        authority.setUsername("kristoffer");
 
+        Authority authority2 = new Authority();
+        authority2.setAuthority("ROLE_USER");
+        authority2.setUsername("alina");
 
         authorityRepository.save(authority);
         authorityRepository.save(authority2);
+
+
     }
 
 

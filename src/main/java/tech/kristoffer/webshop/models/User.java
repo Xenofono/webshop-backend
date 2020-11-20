@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Entity
 @Data
-@SecondaryTable(name = "authority", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 public class User {
 
     @Id
@@ -23,8 +22,10 @@ public class User {
 
     private String username;
     private String password;
-    @Column(table = "authority", name="authority")
-    private String authority;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "authority_id", referencedColumnName = "id")
+    @PrimaryKeyJoinColumn
+    private Authority authority;
     private int enabled = 1;
 
     @PrePersist
@@ -33,8 +34,11 @@ public class User {
     }
 
     public void addCartItem(CartItem newItem){
-        newItem.setSum(newItem.getProduct().getPrice() * newItem.getQuantity());
         this.cart.getCartItems().add(newItem);
+        double oldTotal = this.cart.getTotal();
+        double newTotal = oldTotal + newItem.getSum();
+        this.cart.setTotal(newTotal);
+
     }
 
 

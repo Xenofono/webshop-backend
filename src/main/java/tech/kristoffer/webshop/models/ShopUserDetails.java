@@ -1,6 +1,7 @@
 package tech.kristoffer.webshop.models;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -16,8 +17,8 @@ public class ShopUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println(user.getAuthority());
-        return List.of(user::getAuthority);
+        System.out.println(user.getAuthority().getAuthority());
+        return List.of(new SimpleGrantedAuthority(user.getAuthority().getAuthority()));
     }
 
     @Override

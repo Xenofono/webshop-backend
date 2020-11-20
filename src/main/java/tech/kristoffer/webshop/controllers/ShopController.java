@@ -1,36 +1,40 @@
 package tech.kristoffer.webshop.controllers;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import tech.kristoffer.webshop.constants.SecurityConstants;
 import tech.kristoffer.webshop.models.Authority;
 import tech.kristoffer.webshop.models.CreateUserRequest;
 import tech.kristoffer.webshop.models.Product;
 import tech.kristoffer.webshop.models.User;
+import tech.kristoffer.webshop.models.requests.AddToCartRequest;
 import tech.kristoffer.webshop.repositories.AuthorityRepository;
 import tech.kristoffer.webshop.repositories.ProductRepository;
 import tech.kristoffer.webshop.repositories.UserRepository;
+import tech.kristoffer.webshop.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("shop")
 public class ShopController {
 
     private ProductRepository productRepository;
-    private UserRepository userRepository;
-    private AuthorityRepository authorityRepository;
-    private UserDetailsService userDetailsService;
     private PasswordEncoder passwordEncoder;
+    private UserService userService;
 
-    public ShopController(ProductRepository productRepository, UserRepository userRepository, AuthorityRepository authorityRepository, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public ShopController(ProductRepository productRepository, PasswordEncoder passwordEncoder, UserService userService) {
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
-        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -38,30 +42,20 @@ public class ShopController {
         return productRepository.findAll();
     }
 
-    @GetMapping("/test")
-    public String test (){
-        return "Nu funkar den rackaren";
-    }
 
     @PostMapping("signup")
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest newUser){
         System.out.println(newUser.getUsername());
-
-        if( userRepository.findUserByUsername(newUser.getUsername()) != null){
-            return ResponseEntity.unprocessableEntity().build();
-        }
-        User user = new User();
-        user.setUsername(newUser.getUsername());
-        user.setPassword(newUser.getPassword());
-        user.setAuthority("ROLE_USER");
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Authority authority = new Authority();
-        authority.setUsername(user.getUsername());
-        authority.setAuthority(user.getAuthority());
-
-        userRepository.save(user);
-        authorityRepository.save(authority);
+        userService.signupUser(newUser);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<String> addToCart(@RequestBody AddToCartRequest addToCartRequest, HttpServletRequest request){
+        userService.addToCart(addToCartRequest, request);
+        return ResponseEntity.ok("Produkt tillagd");
 
     }
+
+
 }
