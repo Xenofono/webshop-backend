@@ -16,7 +16,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cart_id")
     private List<CartItem> cartItems = new ArrayList<>();
     @OneToOne
@@ -36,5 +36,11 @@ public class Cart {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void clearCart() {
+        this.cartItems.clear();
+        this.total = 0;
+
     }
 }
