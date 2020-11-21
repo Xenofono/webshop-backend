@@ -21,6 +21,7 @@ public class Cart {
     private List<CartItem> cartItems = new ArrayList<>();
     @OneToOne
     @JsonIgnore
+    @MapsId
     private User user;
     private double total;
 

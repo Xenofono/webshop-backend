@@ -45,8 +45,7 @@ public class CartService {
         productAlreadyExistsInCart.ifPresentOrElse(item -> {
                     user.removeCartItem(item);
                     user.addCartItem(newCartItem);
-
-                }, () -> user.addCartItem(newCartItem));
+                    }, () -> user.addCartItem(newCartItem));
 
         userRepository.save(user);
 

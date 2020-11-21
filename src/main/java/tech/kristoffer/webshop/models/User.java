@@ -14,8 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Cart cart = new Cart();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<ShopOrder> orders = new HashSet<>();

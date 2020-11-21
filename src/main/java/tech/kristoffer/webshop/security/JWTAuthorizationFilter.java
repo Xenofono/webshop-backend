@@ -59,14 +59,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
             String user = decodedJwt.getSubject();
 
-//            Map<String, Claim> claims = decodedJwt.getClaims();
-//            Claim claim = claims.get("ROLE");
-//            String role = claim.asString();
-//            System.out.println(role);
-
             Authority authority = authorityRepository.findByUsername(user);
-
-
 
 
             if (user != null ) {
