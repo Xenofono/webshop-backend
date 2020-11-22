@@ -45,6 +45,7 @@
                 <td th:text="${order.created}"></td>
                 <td th:text="${order.expedited}"></td>
                 <td><a class="waves-effect waves-light btn" th:href="@{/admin/orders/}+${order.id}">Detaljer</a></td>
+
             </tr>
 
             </tbody>
@@ -54,3 +55,28 @@
 </div>
 </body>
 </html>
+
+
+<!--<tbody>-->
+<!--<tr th:each="product : ${products}">-->
+<!--    <td th:text="${product.title}"></td>-->
+<!--    <td th:text="${product.description}"></td>-->
+<!--    <td th:text="${product.articleNumber}"></td>-->
+<!--    <td th:text="${product.category}"></td>-->
+<!--    <td th:text="${product.price}"></td>-->
+<!--    &lt;!&ndash;                    <td><input type="text" name="quantity" placeholder="quantity"></td>&ndash;&gt;-->
+
+<!--    &lt;!&ndash;Nytt&ndash;&gt;-->
+<!--    <td><input type="quantity" th:name="quantity" placeholder="Quantity"/></td>-->
+
+
+<!--    <td>-->
+<!--        <form action="#" th:action="@{/user/addToCart/}" th:object="${form}" method="post">-->
+<!--            <input type="hidden" th:name="id" placeholder="id" th:field="*{id}"/>-->
+<!--            <input type="text" th:name="quantity" placeholder="Quantity" th:field="*{quantity}"/>-->
+<!--    </form>-->
+<!--    </td>-->
+
+
+<!--</tr>-->
+<!--</tbody>-->

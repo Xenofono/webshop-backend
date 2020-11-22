@@ -120,6 +120,8 @@ public class AdminController {
         return "redirect:/admin/add-admin";
     }
 
+
+
     @GetMapping("/add-product")
     public String getAddProductPage(@RequestParam(value="id",required = false) String id, Model model) {
         FormModel form = new FormModel();
