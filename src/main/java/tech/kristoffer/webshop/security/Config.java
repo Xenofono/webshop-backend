@@ -30,7 +30,7 @@ public class Config {
     private PasswordEncoder passwordEncoder;
     private UserDetailsService userDetailsService;
 
-    public Config(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService ) {
+    public Config(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
     }
@@ -52,7 +52,6 @@ public class Config {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-
 
 
             http.cors().and().antMatcher("/shop/**")
@@ -79,7 +78,6 @@ public class Config {
         AuthenticationSuccessHandler authenticationSuccessHandler;
 
 
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
@@ -104,7 +102,7 @@ public class Config {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*");
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,11 +35,11 @@ public class ShopOrderService {
         this.javaMailSender = javaMailSender;
     }
 
-    public List<CartItem> jsonToCartItem(Map<String, String> map){
+    public List<CartItem> jsonToCartItem(Map<String, String> map) {
         return jsonMapper.mapJsonToCartItem(map);
     }
 
-    public void createOrder(User user){
+    public void createOrder(User user) {
         Cart cart = user.getCart();
         ShopOrder shopOrder = new ShopOrder();
         cart.getCartItems().forEach(item -> {
@@ -52,7 +53,7 @@ public class ShopOrderService {
         shopOrderRepository.save(shopOrder);
     }
 
-    public void createOrder(HttpServletRequest request){
+    public void createOrder(HttpServletRequest request) {
         User user = jwtUtil.getUserFromRequest(request);
 
         ShopOrder shopOrder = new ShopOrder();
@@ -69,7 +70,7 @@ public class ShopOrderService {
         shopOrderRepository.save(shopOrder);
     }
 
-    public List<ShopOrder> findAll(){
+    public List<ShopOrder> findAll() {
         List<ShopOrder> shopOrders = new ArrayList<>();
         shopOrderRepository.findAll().forEach(shopOrders::add);
         return shopOrders;
@@ -87,27 +88,28 @@ public class ShopOrderService {
         shopOrderRepository.save(order);
     }
 
-    public List<ShopOrder> findByUserUsername(String name){
+    public List<ShopOrder> findByUserUsername(String name) {
         return shopOrderRepository.findShopOrderByUserUsernameContaining(name);
     }
 
-    private void sendConfirmationEmail(User user ){
-        new Thread(() -> {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("kristoffer.nasstrom@gmail.com");
-            message.setTo("kristoffer.nasstrom@gmail.com");
-            message.setSubject("Orderbekräftelse Kris webbshop");
-            String items = user.getCart().getCartItems().stream().map(item -> {
-                String itemString =
-                        "ID: " + item.getId() + " NAMN: " + item.getProduct().getName()
-                                + " KVANTITET: " + item.getQuantity() + " PRIS: " + item.getSum() + " kr";
-                return itemString;
-            }).collect(Collectors.joining("\n************\n"));
-            String greetingAndTotal = "Tack för din beställning " + user.getUsername() + ", din beställning blev totalt "
-                    + user.getCart().getTotal() + " kr";
-            message.setText(greetingAndTotal + "\n\n" +items);
-            javaMailSender.send(message);
-        }).start();
+    private void sendConfirmationEmail(User user) {
+        System.out.println(user.getCart().getTotal());
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("kristoffer.nasstrom@gmail.com");
+        message.setTo("kristoffer.nasstrom@gmail.com");
+        message.setSubject("Orderbekräftelse Kris webbshop");
+        String items = user.getCart().getCartItems().stream().map(item -> {
+            String itemString =
+                    "ID: " + item.getId() + " NAMN: " + item.getProduct().getName()
+                            + " KVANTITET: " + item.getQuantity() + " PRIS: " + item.getSum() + " kr";
+            return itemString;
+        }).collect(Collectors.joining("\n************\n"));
+        String greetingAndTotal = "Tack för din beställning " + user.getUsername() + ", din beställning blev totalt "
+                + user.getCart().getTotal() + " kr";
+        message.setText(greetingAndTotal + "\n\n" + items);
+
+        CompletableFuture.runAsync(() -> javaMailSender.send(message));
 
     }
 
