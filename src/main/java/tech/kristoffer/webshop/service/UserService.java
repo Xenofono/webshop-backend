@@ -49,6 +49,7 @@ public class UserService {
         User user = new User();
         user.setUsername(formModel.getFirstInput());
         user.setPassword(passwordEncoder.encode(formModel.getSecondInput()));
+        user.getCart().setUser(user);
 
         Authority authority = new Authority();
         authority.setUsername(user.getUsername());
@@ -72,6 +73,7 @@ public class UserService {
         user.setUsername(newUser.getUsername());
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         user.setAuthority(authority);
+        user.getCart().setUser(user);
         userRepository.save(user);
     }
 

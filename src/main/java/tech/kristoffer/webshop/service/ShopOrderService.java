@@ -1,6 +1,8 @@
 package tech.kristoffer.webshop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import tech.kristoffer.webshop.models.Cart;
 import tech.kristoffer.webshop.models.CartItem;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ShopOrderService {
@@ -22,11 +25,13 @@ public class ShopOrderService {
     private JsonMapper jsonMapper;
     private ShopOrderRepository shopOrderRepository;
     private JwtUtil jwtUtil;
+    private JavaMailSender javaMailSender;
 
-    public ShopOrderService(JsonMapper jsonMapper, ShopOrderRepository shopOrderRepository, JwtUtil jwtUtil) {
+    public ShopOrderService(JsonMapper jsonMapper, ShopOrderRepository shopOrderRepository, JwtUtil jwtUtil, JavaMailSender javaMailSender) {
         this.jsonMapper = jsonMapper;
         this.shopOrderRepository = shopOrderRepository;
         this.jwtUtil = jwtUtil;
+        this.javaMailSender = javaMailSender;
     }
 
     public List<CartItem> jsonToCartItem(Map<String, String> map){
@@ -58,6 +63,7 @@ public class ShopOrderService {
             shopOrder.getItems().put(stringId, jsonItem);
             shopOrder.setTotal(shopOrder.getTotal() + item.getSum());
         });
+        sendConfirmationEmail(user);
         user.getCart().clearCart();
         shopOrder.setUser(user);
         shopOrderRepository.save(shopOrder);
@@ -83,6 +89,26 @@ public class ShopOrderService {
 
     public List<ShopOrder> findByUserUsername(String name){
         return shopOrderRepository.findShopOrderByUserUsernameContaining(name);
+    }
+
+    private void sendConfirmationEmail(User user ){
+        new Thread(() -> {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("kristoffer.nasstrom@gmail.com");
+            message.setTo("kristoffer.nasstrom@gmail.com");
+            message.setSubject("Orderbekräftelse Kris webbshop");
+            String items = user.getCart().getCartItems().stream().map(item -> {
+                String itemString =
+                        "ID: " + item.getId() + " NAMN: " + item.getProduct().getName()
+                                + " KVANTITET: " + item.getQuantity() + " PRIS: " + item.getSum() + " kr";
+                return itemString;
+            }).collect(Collectors.joining("\n************\n"));
+            String greetingAndTotal = "Tack för din beställning " + user.getUsername() + ", din beställning blev totalt "
+                    + user.getCart().getTotal() + " kr";
+            message.setText(greetingAndTotal + "\n\n" +items);
+            javaMailSender.send(message);
+        }).start();
+
     }
 
 

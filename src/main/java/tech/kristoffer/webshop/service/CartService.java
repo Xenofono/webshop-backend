@@ -64,6 +64,10 @@ public class CartService {
                 .findAny();
 
         cartItem.ifPresent(user::removeCartItem);
+
+        if(user.getCart().getCartItems().isEmpty()){
+            user.getCart().setTotal(0);
+        }
         userRepository.save(user);
 
 

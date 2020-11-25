@@ -44,7 +44,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             System.out.println("user: " + creds.getUsername());
             System.out.println("password: " + creds.getPassword());
 
-
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     creds.getUsername(),
                     creds.getPassword(),
@@ -63,7 +62,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = user.getUsername();
 //        user.getAuthorities().forEach(auth -> System.out.println(auth.getAuthority()));
 
-        Date expiresAt = new Date(System.currentTimeMillis() + 300_000);
+        Date expiresAt = new Date(System.currentTimeMillis() + 3_000_000);
         Algorithm secret = Algorithm.HMAC256("apa näbbdjur oneplus stor fisk".getBytes());
 
         //splittar ROLE_ADMIN till {ROLE, ADMIN}

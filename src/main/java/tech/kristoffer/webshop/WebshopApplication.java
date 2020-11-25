@@ -50,59 +50,62 @@ public class WebshopApplication implements CommandLineRunner {
 //        message.setText("Du köpte en Ryzen 5900X 6100 kr");
 //        javaMailSender.send(message);
 
-        Product product = new Product();
-        product.setImageUrl("https://imgprd19.hobbylobby.com/5/ba/61/5ba610f22c7cd6efb4e6c69387d938451a6c40e6/350Wx350H-633719-0320.jpg");
-        product.setName("Röd tröja");
-        product.setDescription("Fin och röd, du har den på kroppen, du vet vad en tröja är va?");
-        product.setPrice(149.99);
-
-        Product product2 = new Product();
-        product2.setImageUrl("https://static.mio.host/images/products/35726.jpg?width=1920&height=1920&crop=false");
-        product2.setName("Blå matta");
-        product2.setPrice(195);
-        product2.setDescription("Blå, den ska vara på golvet");
-        productRepository.saveAll(List.of(product, product2));
-
-
-
-
-
-
-        User newUser = new User();
-        newUser.setUsername("kristoffer");
-        newUser.setPassword(passwordEncoder.encode("pass"));
-
-        User newUser2 = new User();
-        newUser2.setUsername("alina");
-        newUser2.setPassword(passwordEncoder.encode("pass"));
-
-        userRepository.save(newUser);
-        userRepository.save(newUser2);
-
-
-
-
-        CartItem cartItem = new CartItem();
-        cartItem.setProduct(product);
-        cartItem.setQuantity(3);
-        CartItem cartItem2 = new CartItem();
-        cartItem2.setProduct(product2);
-        cartItem2.setQuantity(5);
-        newUser2.addCartItem(cartItem);
-        newUser2.addCartItem(cartItem2);
-        shopOrderService.createOrder(newUser2);
+//        Product product = new Product();
+//        product.setImageUrl("https://imgprd19.hobbylobby.com/5/ba/61/5ba610f22c7cd6efb4e6c69387d938451a6c40e6/350Wx350H-633719-0320.jpg");
+//        product.setName("Röd tröja");
+//        product.setDescription("Fin och röd, du har den på kroppen, du vet vad en tröja är va?");
+//        product.setPrice(149.99);
+//
+//        Product product2 = new Product();
+//        product2.setImageUrl("https://static.mio.host/images/products/35726.jpg?width=1920&height=1920&crop=false");
+//        product2.setName("Blå matta");
+//        product2.setPrice(195);
+//        product2.setDescription("Blå, den ska vara på golvet");
+//        productRepository.saveAll(List.of(product, product2));
+//
+//
+//
+//
+//
+//
+//        User newUser = new User();
+//        newUser.setUsername("kristoffer");
+//        newUser.setPassword(passwordEncoder.encode("pass"));
+//        newUser.getCart().setUser(newUser);
+//
+//        User newUser2 = new User();
+//        newUser2.setUsername("robbin");
+//        newUser2.setPassword(passwordEncoder.encode("pass"));
+//        newUser2.getCart().setUser(newUser2);
+//
+//
+//        userRepository.save(newUser);
+//        userRepository.save(newUser2);
 
 
-        Authority authority = new Authority();
-        authority.setAuthority("ROLE_ADMIN");
-        authority.setUsername("kristoffer");
 
-        Authority authority2 = new Authority();
-        authority2.setAuthority("ROLE_USER");
-        authority2.setUsername("alina");
 
-        authorityRepository.save(authority);
-        authorityRepository.save(authority2);
+//        CartItem cartItem = new CartItem();
+//        cartItem.setProduct(product);
+//        cartItem.setQuantity(3);
+//        CartItem cartItem2 = new CartItem();
+//        cartItem2.setProduct(product2);
+//        cartItem2.setQuantity(5);
+//        newUser2.addCartItem(cartItem);
+//        newUser2.addCartItem(cartItem2);
+//        shopOrderService.createOrder(newUser2);
+
+
+//        Authority authority = new Authority();
+//        authority.setAuthority("ROLE_ADMIN");
+//        authority.setUsername("kristoffer");
+//
+//        Authority authority2 = new Authority();
+//        authority2.setAuthority("ROLE_USER");
+//        authority2.setUsername("robbin");
+//
+//        authorityRepository.save(authority);
+//        authorityRepository.save(authority2);
 
 
     }

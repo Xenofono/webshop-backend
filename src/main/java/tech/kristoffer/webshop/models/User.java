@@ -27,10 +27,9 @@ public class User {
     private Authority authority;
     private int enabled = 1;
 
-    @PrePersist
-    public void init(){
-        this.cart.setUser(this);
-    }
+
+
+
 
     public void addCartItem(CartItem newItem){
         this.cart.getCartItems().add(newItem);

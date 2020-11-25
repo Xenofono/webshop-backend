@@ -4,7 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.kristoffer.webshop.models.requests.CreateUserRequest;
 import tech.kristoffer.webshop.models.Product;
+import tech.kristoffer.webshop.models.requests.FilterProductRequest;
 import tech.kristoffer.webshop.repositories.ProductRepository;
+import tech.kristoffer.webshop.service.ProductService;
 import tech.kristoffer.webshop.service.UserService;
 
 import javax.validation.Valid;
@@ -13,17 +15,22 @@ import javax.validation.Valid;
 @RequestMapping("shop")
 public class ShopController {
 
-    private ProductRepository productRepository;
+    private ProductService productService;
     private UserService userService;
 
-    public ShopController(ProductRepository productRepository, UserService userService) {
-        this.productRepository = productRepository;
+    public ShopController(ProductService productService, UserService userService) {
+        this.productService = productService;
         this.userService = userService;
     }
 
     @GetMapping
     public Iterable<Product> getAllProducts(){
-        return productRepository.findAll();
+        return productService.findAll();
+    }
+
+    @PostMapping("filter")
+    public Iterable<Product> getFilteredProducts(@RequestBody FilterProductRequest request){
+        return productService.findByNameContaining(request);
     }
 
 

@@ -3,6 +3,7 @@ package tech.kristoffer.webshop.service;
 import org.springframework.stereotype.Service;
 import tech.kristoffer.webshop.models.FormModel;
 import tech.kristoffer.webshop.models.Product;
+import tech.kristoffer.webshop.models.requests.FilterProductRequest;
 import tech.kristoffer.webshop.repositories.ProductRepository;
 
 import java.util.List;
@@ -55,4 +56,7 @@ public class ProductService {
     }
 
 
+    public Iterable<Product> findByNameContaining(FilterProductRequest request) {
+        return productRepository.findByNameContaining(request.getName());
+    }
 }
